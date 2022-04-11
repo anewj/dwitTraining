@@ -1,15 +1,25 @@
 import express from 'express';
+import {re} from "@babel/core/lib/vendor/import-meta-resolve";
+
 const bodyParser = require("express");
 const app = express()
 const port = 3000
 require('dotenv').config()
 
-app.use(bodyParser.json());
+const log = (req, res, next) => {
+    console.log('<<<<<<<<<<<LOGGER>>>>>>>>>>')
+    console.log(req.method, req.url)
+    console.log('<<<<<<<<<<<LOGGER>>>>>>>>>>')
+    next()
+}
+app.use(log)
 
+app.use(bodyParser.json());
 require('./routers')(app)
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+
+app.listen(process.env.PORT || port, () => {
+    console.log(`Example app listening on port ${process.env.PORT || port}`)
 })
 
 

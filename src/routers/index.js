@@ -14,7 +14,7 @@ module.exports = async (app) => {
     app.get('*', function (req, res) {
         res.status(404).send({
             success: false,
-            message: 'Not found'
+            message: 'Not found. blah '
         })
     });
 };
