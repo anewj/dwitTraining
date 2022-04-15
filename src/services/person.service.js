@@ -11,6 +11,7 @@ async function create(personParams) {
     // save Person
     const person = new Person(personParams);
 
+    console.log('person  ++++++++ ', person)
     const promise = new Promise((resolve, reject) => {
         person.save().then(record => {
             resolve(record)
@@ -21,7 +22,7 @@ async function create(personParams) {
     return await promise;
 }
 
-async function getAll() {
+function getAll() {
     return Person.find();
 }
 

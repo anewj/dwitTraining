@@ -1,5 +1,6 @@
 import express from 'express';
 import PersonController from "../controllers/person.controller";
+import {log} from "nodemon/lib/utils";
 
 const {
     Router,
@@ -14,7 +15,8 @@ const auth = (req, res, next) => {
     console.log('QUERY', req.query)
     const {name, number} = req.query
     console.log('NAME', name)
-    const validJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzdXBlcmFkbWluIiwiZW1haWwiOiJzdXBlcmFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTY0OTU4ODAwMSwiZXhwIjoxNjQ5Njc0NDAxfQ.UlGiBpgfySCfrGeVnS6crd57Q4POEfI6ac8oiQmh-Hg'
+    console.log('Number', number)
+    const validJWT = 'password'
     const {jwt} = req.headers
     console.log('AUTH1', jwt)
     if (jwt !== validJWT)
@@ -39,16 +41,55 @@ PersonRouter.get('/test', auth, role, (req, res) => {
 })
 
 PersonRouter.get('/', role, auth, async (req, res) => {
-    console.log('Get request', req.headers)
-    const person = await PersonController.getAllPersons()
-    res.send({data: person})
+    console.log('Get request /////////', req.headers)
+    let startTime, endTime;
+
+    function start() {
+        startTime = new Date();
+    };
+
+    function end() {
+        endTime = new Date();
+        var timeDiff = endTime - startTime; //in ms
+        // strip the ms
+        // timeDiff /= 1000;
+
+        // get seconds
+        // var seconds = Math.round(timeDiff);
+        console.log(timeDiff + " seconds");
+    }
+
+    // await
+    start()
+    const person1 = PersonController.getAllPersons()
+    const person2 = PersonController.getAllPersons()
+    const person3 = PersonController.getAllPersons()
+    const person4 = PersonController.getAllPersons()
+    const person5 = PersonController.getAllPersons()
+    end()
+
+    await Promise.all([person1, person2, person3, person4, person5,]).then(([p1, p2,]) => {
+        console.log('person1', p1)
+        console.log('person2', p2)
+        res.send({data: {p1, p2}})
+    })
+
+//    Promise
+//     let person = 'asd'
+//     // Promise
+//     PersonController.getAllPersons()
+//         .then(vals => {
+//             console.log('vals', vals)
+//             person = vals
+//             res.send({data: person})
+//         })
+
 })
 
 PersonRouter.post('/', async (req, res) => {
     console.log('POST request', req.headers)
-    const {name, phone} = req.body
     const person = await PersonController.insertPerson(req.body)
-    res.send(person)
+    // res.send(person)
 })
 
 export default PersonRouter;

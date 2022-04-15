@@ -1,11 +1,21 @@
 const personService = require('../services/person.service');
 
-function getAllPersons() {
+const getAllPersons = () => {
     return personService.getAll()
 }
 
 function insertPerson(body) {
-    return personService.create(body)
+    console.log('insert person')
+    const {name, phone} = body
+    if (!name)
+        return({error: "no Name"})
+    // if (!phone)
+    //     return({error: "no Number"})
+    // if (typeof name !== 'string')
+    //     return({error: "name must be string"})
+
+    personService.create(body).then(r => {
+        console.log(r)})
 }
 
 function getPersonById(req, res, next) {

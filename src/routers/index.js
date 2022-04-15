@@ -3,6 +3,7 @@ import PersonRouter from "./person.router";
 module.exports = async (app) => {
     // person
     app.use('/person', PersonRouter);
+
     // Test route
     app.get('/', (req, res) => {
         console.log('GET request')
