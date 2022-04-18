@@ -1,6 +1,5 @@
 import express from 'express';
 import PersonController from "../controllers/person.controller";
-import {log} from "nodemon/lib/utils";
 
 const {
     Router,
@@ -32,15 +31,16 @@ const role = (req, res, next) => {
     console.log('Role')
     next()
 }
+
 // Test route
-PersonRouter.get('/test', auth, role, (req, res) => {
+PersonRouter.get('/test', (req, res) => {
     console.log('GET request: person test')
     res.send({
         message: 'Hello world'
     })
 })
 
-PersonRouter.get('/', role, auth, async (req, res) => {
+PersonRouter.get('/', auth, role, async (req, res) => {
     console.log('Get request /////////', req.headers)
     let startTime, endTime;
 
@@ -69,8 +69,8 @@ PersonRouter.get('/', role, auth, async (req, res) => {
     end()
 
     await Promise.all([person1, person2, person3, person4, person5,]).then(([p1, p2,]) => {
-        console.log('person1', p1)
-        console.log('person2', p2)
+        // console.log('person1', p1)
+        // console.log('person2', p2)
         res.send({data: {p1, p2}})
     })
 
@@ -86,10 +86,10 @@ PersonRouter.get('/', role, auth, async (req, res) => {
 
 })
 
-PersonRouter.post('/', async (req, res) => {
+PersonRouter.post('/', auth, async (req, res) => {
     console.log('POST request', req.headers)
     const person = await PersonController.insertPerson(req.body)
-    // res.send(person)
+    res.send(person)
 })
 
 export default PersonRouter;

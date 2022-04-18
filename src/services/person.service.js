@@ -10,16 +10,7 @@ module.exports = {
 async function create(personParams) {
     // save Person
     const person = new Person(personParams);
-
-    console.log('person  ++++++++ ', person)
-    const promise = new Promise((resolve, reject) => {
-        person.save().then(record => {
-            resolve(record)
-        }).catch(err => {
-            reject(err);
-        });
-    });
-    return await promise;
+    return await person.save();
 }
 
 function getAll() {
