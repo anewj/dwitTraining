@@ -32,6 +32,16 @@ const role = (req, res, next) => {
     next()
 }
 
+// Get by ID route
+PersonRouter.get('/:id', async (req, res) => {
+    console.log('GET request: person by ID')
+    const {id} = req.params
+    const value = await PersonController.getPersonById(id)
+    res.send({
+        data: value
+    })
+})
+
 // Test route
 PersonRouter.get('/test', (req, res) => {
     console.log('GET request: person test')
@@ -42,54 +52,20 @@ PersonRouter.get('/test', (req, res) => {
 
 PersonRouter.get('/', auth, role, async (req, res) => {
     console.log('Get request /////////', req.headers)
-    let startTime, endTime;
-
-    function start() {
-        startTime = new Date();
-    };
-
-    function end() {
-        endTime = new Date();
-        var timeDiff = endTime - startTime; //in ms
-        // strip the ms
-        // timeDiff /= 1000;
-
-        // get seconds
-        // var seconds = Math.round(timeDiff);
-        console.log(timeDiff + " seconds");
-    }
-
-    // await
-    start()
-    const person1 = PersonController.getAllPersons()
-    const person2 = PersonController.getAllPersons()
-    const person3 = PersonController.getAllPersons()
-    const person4 = PersonController.getAllPersons()
-    const person5 = PersonController.getAllPersons()
-    end()
-
-    await Promise.all([person1, person2, person3, person4, person5,]).then(([p1, p2,]) => {
-        // console.log('person1', p1)
-        // console.log('person2', p2)
-        res.send({data: {p1, p2}})
-    })
-
-//    Promise
-//     let person = 'asd'
-//     // Promise
-//     PersonController.getAllPersons()
-//         .then(vals => {
-//             console.log('vals', vals)
-//             person = vals
-//             res.send({data: person})
-//         })
-
+    const queries = req.query
+    console.log('queries', queries)
+    const data = await PersonController.getAllPersons(queries)
+    res.send({data})
 })
 
 PersonRouter.post('/', auth, async (req, res) => {
     console.log('POST request', req.headers)
-    const person = await PersonController.insertPerson(req.body)
-    res.send(person)
+    try {
+        const person = await PersonController.insertPerson(req.body)
+        res.send(person)
+    } catch (e) {
+        res.send({reason: e.message})
+    }
 })
 
 export default PersonRouter;

@@ -1,7 +1,7 @@
 const personService = require('../services/person.service');
 
-const getAllPersons = () => {
-    return personService.getAll()
+const getAllPersons = async (query) => {
+    return await personService.getAll(query)
 }
 
 async function insertPerson(body) {
@@ -14,14 +14,17 @@ async function insertPerson(body) {
     //     return({error: "no Number"})
     // if (typeof name !== 'string')
     //     return({error: "name must be string"})
-
-    return await personService.create(body)
+    try {
+        return await personService.create(body)
+    } catch (e) {
+        console.log('Error catched')
+        // return await personService.create(body)
+        throw Error('Duplicate Value')
+    }
 }
 
-function getPersonById(req, res, next) {
-    personService.getById(req.params.id)
-        .then(person => person ? res.json(person) : res.sendStatus(404))
-        .catch(err => next(err));
+async function getPersonById(id) {
+    return await personService.getById(id)
 }
 
 const PersonController = {
