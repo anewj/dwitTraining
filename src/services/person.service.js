@@ -5,6 +5,7 @@ module.exports = {
     create,
     getAll,
     getById,
+    deletePerson
 };
 // async await
 async function create(personParams) {
@@ -15,7 +16,7 @@ async function create(personParams) {
 
 async function getAll(query) {
     const {name, PAN} = query
-    return Person.find({name});
+    return Person.find({"name.first":name});
 }
 
 async function getById(id) {
@@ -23,3 +24,7 @@ async function getById(id) {
     return Person.findById(id);
 }
 
+async function deletePerson(id) {
+    // console.log(await  Person.findById(id))
+    return Person.findOneAndDelete(id);
+}

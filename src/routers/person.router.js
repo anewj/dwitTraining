@@ -68,4 +68,14 @@ PersonRouter.post('/', auth, async (req, res) => {
     }
 })
 
+PersonRouter.delete('/:id', auth, async (req, res) => {
+    console.log('DELETE request', req.headers)
+    try {
+        const person = await PersonController.deletePerson(req.params.id)
+        res.send(person)
+    } catch (e) {
+        res.send({reason: e.message})
+    }
+})
+
 export default PersonRouter;

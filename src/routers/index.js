@@ -1,8 +1,10 @@
 import PersonRouter from "./person.router";
+import UserRouter from "./user.router";
 
 module.exports = async (app) => {
     // person
     app.use('/person', PersonRouter);
+    app.use('/user', UserRouter);
 
     // Test route
     app.get('/', (req, res) => {

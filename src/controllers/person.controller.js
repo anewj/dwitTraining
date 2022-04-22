@@ -27,10 +27,15 @@ async function getPersonById(id) {
     return await personService.getById(id)
 }
 
+async function deletePerson(id) {
+    return await personService.deletePerson(id)
+}
+
 const PersonController = {
     getAllPersons,
     insertPerson,
     getPersonById,
+    deletePerson
 }
 
 export default PersonController
